@@ -45,6 +45,9 @@ target_link_libraries(constraint_convergence PUBLIC m3t)
 add_executable(optimization_time optimization_time.cpp)
 target_link_libraries(optimization_time PUBLIC m3t)
 
+add_executable(run_ball_tracking run_ball_tracking.cpp)
+target_link_libraries(run_ball_tracking PUBLIC m3t)
+
 if (USE_AZURE_KINECT)
     add_executable(record_camera_sequence record_camera_sequence.cpp)
     target_link_libraries(record_camera_sequence PUBLIC m3t)

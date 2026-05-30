@@ -30,6 +30,9 @@ target_link_libraries(run_on_recorded_sequence PUBLIC icg)
 add_executable(run_generated_tracker run_generated_tracker.cpp)
 target_link_libraries(run_generated_tracker PUBLIC icg)
 
+add_executable(run_ball_tracking run_ball_tracking.cpp)
+target_link_libraries(run_ball_tracking PUBLIC icg)
+
 if (USE_AZURE_KINECT)
     add_executable(record_camera_sequence record_camera_sequence.cpp)
     target_link_libraries(record_camera_sequence PUBLIC icg)

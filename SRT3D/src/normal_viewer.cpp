@@ -57,6 +57,7 @@ bool NormalViewer::UpdateViewer(int save_index) {
 
   // Display and save images
   DisplayAndSaveImage(save_index, viewer_image);
+  return true;
 }
 
 std::shared_ptr<RendererGeometry> NormalViewer::renderer_geometry_ptr() const {

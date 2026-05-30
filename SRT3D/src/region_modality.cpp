@@ -215,13 +215,23 @@ void RegionModality::set_visualize_points_histogram_image_result(
 }
 
 bool RegionModality::StartModality() {
-  if (!IsSetup()) return false;
-
-  // Initialize histograms
+  std::cout << "[DBG] StartModality begin" << std::endl;
+  if (!IsSetup()) { std::cout << "[DBG] not set up\n"; return false; }
+  std::cout << "[DBG] PrecalculatePoseVariables" << std::endl;
   PrecalculatePoseVariables();
+  std::cout << "[DBG] body2camera t=" << body2camera_pose_.translation().transpose() << std::endl;
+  std::cout << "[DBG] model set_up=" << model_ptr_->set_up()
+            << " camera set_up=" << camera_ptr_->set_up()
+            << " image empty=" << camera_ptr_->image().empty() << std::endl;
+  std::cout << "[DBG] n_lines=" << n_lines_
+            << " temp_hf size=" << temp_histogram_f_.size()
+            << " temp_hb size=" << temp_histogram_b_.size() << std::endl;
+  std::cout << "[DBG] AddLinePixelColorsToTempHistograms" << std::endl;
   AddLinePixelColorsToTempHistograms();
+  std::cout << "[DBG] CalculateHistogram" << std::endl;
   if (CalculateHistogram(1.0f, temp_histogram_f_, &histogram_f_) &&
       CalculateHistogram(1.0f, temp_histogram_b_, &histogram_b_)) {
+    std::cout << "[DBG] StartModality OK" << std::endl;
     return true;
   } else {
     std::cerr << "Histograms could not be initialised for modality " << name_
@@ -507,16 +517,27 @@ void RegionModality::PrecalculateScaleDependentVariables(int corr_iteration) {
 }
 
 void RegionModality::AddLinePixelColorsToTempHistograms() {
+  std::cout << "[DBG] image cols=" << camera_ptr_->image().cols
+            << " rows=" << camera_ptr_->image().rows << std::endl;
   const cv::Mat &image{camera_ptr_->image()};
-  const Model::TemplateView *template_view;
+  const Model::TemplateView *template_view = nullptr;
+  std::cout << "[DBG] GetClosestTemplateView..." << std::endl;
   model_ptr_->GetClosestTemplateView(body2camera_pose_, &template_view);
+  std::cout << "[DBG] template_view=" << (void*)template_view << std::endl;
+  if (template_view == nullptr) { std::cerr << "[DBG] NULL template_view!\n"; return; }
+  std::cout << "[DBG] data_points size=" << template_view->data_points.size()
+            << " n_lines=" << n_lines_ << std::endl;
 
   // Iterate over all points
+  std::cout << "[DBG] fill start, hf_size=" << temp_histogram_f_.size() << std::endl;
   std::fill(begin(temp_histogram_f_), end(temp_histogram_f_), 0.0f);
   std::fill(begin(temp_histogram_b_), end(temp_histogram_b_), 0.0f);
+  std::cout << "[DBG] fill done, entering loop" << std::endl;
+  int dbg_iter = 0;
   for (auto data_point = begin(template_view->data_points);
        data_point != begin(template_view->data_points) + n_lines_;
-       ++data_point) {
+       ++data_point, ++dbg_iter) {
+    if (dbg_iter % 50 == 0) std::cout << "[DBG] loop iter=" << dbg_iter << std::endl;
     // Project point data in camera frame
     Eigen::Vector3f center_f_camera{body2camera_pose_ *
                                     data_point->center_f_body};

@@ -170,14 +170,18 @@ bool Tracker::VisualizeResults(int save_idx) {
 
 bool Tracker::UpdateViewers(int iteration) {
   if (!viewer_ptrs_.empty()) {
+    bool any_display = false;
     for (auto &viewer_ptr : viewer_ptrs_) {
       viewer_ptr->UpdateViewer(iteration);
+      if (viewer_ptr->display_images()) any_display = true;
     }
-    char key = cv::waitKey(viewer_time_);
-    if (key == 't' && !tracking_started_)
-      start_tracking_ = true;
-    else if (key == 'q')
-      return false;
+    if (any_display) {
+      char key = cv::waitKey(viewer_time_);
+      if (key == 't' && !tracking_started_)
+        start_tracking_ = true;
+      else if (key == 'q')
+        return false;
+    }
   }
   return true;
 }

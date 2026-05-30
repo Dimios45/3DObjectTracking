@@ -15,6 +15,9 @@ target_link_libraries(parameter_study_opt_dataset PUBLIC srt3d)
 add_executable(run_on_recorded_sequence run_on_recorded_sequence.cpp)
     target_link_libraries(run_on_recorded_sequence PUBLIC srt3d)
 
+add_executable(run_ball_tracking run_ball_tracking.cpp)
+target_link_libraries(run_ball_tracking PUBLIC srt3d)
+
 if(USE_AZURE_KINECT)
     add_executable(record_camera_sequence record_camera_sequence.cpp)
     target_link_libraries(record_camera_sequence PUBLIC srt3d)

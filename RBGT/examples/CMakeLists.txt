@@ -9,6 +9,9 @@ target_link_libraries(evaluate_ablation_study PUBLIC rbgt)
 add_executable(run_on_recorded_sequence run_on_recorded_sequence.cpp)
     target_link_libraries(run_on_recorded_sequence PUBLIC rbgt)
 
+add_executable(run_ball_tracking run_ball_tracking.cpp)
+target_link_libraries(run_ball_tracking PUBLIC rbgt)
+
 if(USE_AZURE_KINECT)
     add_executable(record_camera_sequence record_camera_sequence.cpp)
     target_link_libraries(record_camera_sequence PUBLIC rbgt)
