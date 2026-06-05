@@ -1,30 +1,59 @@
-# CoTracker2 vs M3T: OPT Dataset Comparison
+# OPT Dataset: 2D Tracker Comparison
 
 ## Overview
 
-This document compares **CoTracker2** (a 2D dense point tracker) with **M3T** (a real-time 6DoF
-region-, depth-, and texture-based tracker) on the **OPT benchmark** (Wu et al. 2017) using
-the exact same AUC metric reported in Stoiber 2023, Table 3.3.
+This document compares **CoTracker2**, **CoTracker3**, and **LocoTrack** (2D dense point trackers)
+with **M3T** (a real-time 6DoF region-, depth-, and texture-based tracker) on the **OPT benchmark**
+(Wu et al. 2017).
 
-> **M3T numbers** are taken directly from the published thesis.
-> **CoTracker2 numbers** are produced by the pipeline in `evaluate_cotracker_opt.py`.
-> The OPT dataset (~8.5 GB) must be downloaded to `/mnt/data/mritunjoyh/datasets/opt/`
-> before running.
+> **M3T numbers** are taken directly from Stoiber 2023 (Table 3.3) using the ADD-AUC metric.
+> **CoTracker2/3 and LocoTrack numbers** are produced by the evaluation scripts in
+> `co-tracker/evaluate_*.py` using the TSR metric (see §2).
+> The OPT 424p dataset must be present at `/mnt/data/mritunjoyh/datasets/opt/` before running.
 
 ---
 
-## 1. Dataset & Metric
+## 1. Dataset
+
+We used the scaled-down OPT variant (`OPT424p_3D.zip`) which provides:
 
 | Property | Value |
 |---|---|
 | Objects | 6: Soda, Chest, Ironman, House, Bike, Jet |
 | Sequences | 552 (6 objects × 4 orientations × 23 motion patterns) |
-| Image size | 1920 × 1080 (real-world, robot-arm recordings) |
-| Camera fx/fy | 1060.197 / 1060.273 |
-| Camera cx/cy | 964.809 / 560.952 |
+| Image size | 512 × 424 |
+| Available data | RGB frames, depth frames, GT segmentation masks |
 | Sequence types | Translation (×5), Zoom (×5), In-plane rot. (×5), Out-of-plane rot. (×5), Flashing light, Moving light, Free motion |
 
-### Metric: ADD-AUC
+Dataset path: `/mnt/data/mritunjoyh/datasets/opt/`
+
+```
+opt/
+  soda/  chest/  ironman/  house/  bike/  jet/
+    each object/
+      so_tr_1_b/  so_tr_1_f/  ...   (552 total)
+        color/  0001.png  0002.png  ...
+        depth/  0001.png  0002.png  ...
+        mask/   0001.png  0002.png  ...   ← GT segmentation masks
+```
+
+---
+
+## 2. Metrics
+
+### TSR — Track Success Rate (used for CoTracker2/3, LocoTrack)
+
+The 424p variant does not include mesh `.obj` files, so we use a mask-based 2D tracking metric:
+
+1. **Init:** Sample 200 random points from the GT object mask at frame 0.
+2. **Track:** Run the tracker forward through the full sequence.
+3. **Score:** For each frame t, compute the fraction of still-visible tracks whose 2D position
+   falls inside the GT mask.
+4. **TSR** = mean over all frames, averaged across all 552 sequences.
+
+TSR ∈ [0, 1]; higher is better.
+
+### ADD-AUC [0–20] (M3T reference numbers only)
 
 For each frame the **average vertex error** is computed:
 
@@ -32,42 +61,77 @@ For each frame the **average vertex error** is computed:
 ev(t) = (1/n) Σᵢ ‖ vᵢ − δT · vᵢ ‖
 ```
 
-where `δT = (T_pred · G)⁻¹ · T_gt · G` is the relative pose error in geometry frame and
-`vᵢ` are object mesh vertices. Tracking is successful when `ev(t) < kₑ · d`
-(d = max vertex distance, kₑ ∈ [0, 0.2]).
-
-The **AUC** score integrates the success-rate curve over kₑ ∈ [0, 0.2], giving a value in
-[0, 0.2] that is **multiplied by 100 and reported as [0, 20]** in the paper.
+where `δT = (T_pred · G)⁻¹ · T_gt · G` is the relative pose error and `vᵢ` are object mesh
+vertices. AUC integrates the success-rate curve over threshold kₑ ∈ [0, 0.2], multiplied by 100.
+This requires 3D mesh files which the 424p dataset does not provide, so it is only reported for M3T.
 
 ---
 
-## 2. Method Architectures
+## 3. Method Overview
 
-| Property | M3T | CoTracker2 + EPnP |
-|---|---|---|
-| Output | 6DoF pose (R, t) | 6DoF pose via EPnP on 2D tracks |
-| Input | RGB + optional depth | RGB only |
-| 3D model required | Yes (mesh for region / depth model) | Yes (mesh for 3D–2D correspondences) |
-| Tracking paradigm | Region contour fitting + texture (ORB) + depth | Dense optical-flow-style 2D tracking |
-| Window / iterations | 4 corr. iterations × 2 gradient updates | Sliding window W=8, stride=4 |
-| GPU required | No (single CPU core) | Yes (CUDA/ROCm) |
-| Runtime (OPT) | ~2–5 ms/frame (CPU) | ~100–300 ms/frame (GPU) |
+| Property | M3T | CoTracker2 | CoTracker3 | LocoTrack |
+|---|---|---|---|---|
+| Output | 6DoF pose | 2D tracks | 2D tracks | 2D tracks |
+| Tracking paradigm | Region contour + depth ICP + ORB texture | Sliding window (W=8) correlation | Sliding window (W=60) correlation | Local-to-global TAPIR (CMDTop) |
+| 3D model required | Yes | No | No | No |
+| GPU required | No (single CPU core) | Yes | Yes | Yes |
+| Runtime on OPT | ~3–5 ms/frame (CPU) | ~32 ms/frame (MI300X) | ~33 ms/frame (MI300X) | ~180 ms/frame (MI300X) |
+| Hardware used | CPU | AMD MI300X, ROCm 6.2 | AMD MI300X, ROCm 6.2 | AMD MI300X, ROCm 6.2 |
 
 ---
 
-## 3. M3T Results (Stoiber 2023, Table 3.3)
+## 4. Results
 
-| Object | M3T AUC [0–20] | 2nd best | Method |
-|--------|---------------|---------|--------|
-| Soda | **15.55** | 14.85 | Bugaev'18 |
-| Chest | **17.29** | 15.53 | ORB-SLAM2 |
-| Ironman | **17.50** | 14.71 | Bugaev'18 |
-| House | 16.57 | **17.28** | ORB-SLAM2 |
-| Bike | **13.06** | 12.85 | J.Li'21 |
-| Jet | 16.14 | **17.17** | Bugaev'18 |
-| **Average** | **16.02** | 14.79 | Bugaev'18 |
+> **Metric note:** M3T and 2D trackers use incompatible metrics. ADD-AUC measures 6DoF pose accuracy
+> (requires mesh vertices); TSR measures whether 2D tracks stay on the object. The table shows both
+> side by side for context — do not compare the numbers directly.
 
-### Full comparison table
+### 4.1 Per-object summary
+
+| Object | M3T ADD-AUC [0–20] | CoTracker2 TSR | CoTracker3 TSR | LocoTrack TSR |
+|---|---|---|---|---|
+| Soda | 15.55 | 0.678 | 0.967 | **0.970** |
+| Chest | 17.29 | 0.671 | 0.960 | **0.974** |
+| Ironman | 17.50 | 0.615 | **0.931** | 0.926 |
+| House | 16.57 | 0.656 | 0.971 | **0.972** |
+| Bike | 13.06 | 0.645 | **0.950** | 0.947 |
+| Jet | 16.14 | 0.587 | **0.909** | 0.904 |
+| **Average** | **16.02** | 0.642 | 0.948 | **0.949** |
+
+### 4.2 TSR by motion pattern
+
+| Motion type | CoTracker2 TSR | CoTracker3 TSR | LocoTrack TSR |
+|---|---|---|---|
+| Translation (tr_*) | ~0.93–0.98 | ~0.96–0.98 | ~0.95–0.98 |
+| Zoom slow (zo_1) | ~0.004–0.62 | **~0.96–0.99** | ~0.96–0.99 |
+| Zoom fast (zo_2–5) | ~0.91–0.99 | ~0.94–0.99 | ~0.93–0.99 |
+| In-plane rot. slow (ir_1) | ~0.06–0.23 | **~0.88–0.97** | ~0.87–0.96 |
+| In-plane rot. fast (ir_2–5) | ~0.90–0.95 | ~0.93–0.97 | ~0.92–0.96 |
+| Out-of-plane rot. slow (or_1) | ~0.31–0.34 | ~0.85–0.94 | ~0.84–0.93 |
+| Out-of-plane rot. fast (or_2–5) | ~0.85–0.97 | ~0.88–0.97 | ~0.87–0.96 |
+| Flashing light (fl) | ~0.94–0.98 | ~0.96–0.99 | ~0.96–0.99 |
+| Moving light (ml) | ~0.94–0.98 | ~0.97–0.99 | ~0.96–0.99 |
+| Free motion (fm) | ~0.54–0.59 | **~0.89–0.99** | ~0.88–0.98 |
+
+### 4.3 Key observations
+
+- **CoTracker3 and LocoTrack are virtually identical** (0.948 vs 0.949, within noise across 552
+  sequences). Neither has a consistent per-object advantage — they trade leads object by object.
+- **CoTracker3 massively outperforms CoTracker2** — the larger window (60 frames vs 8) eliminates
+  catastrophic drift in slow sequences: `zo_1` TSR 0.004→0.97, `ir_1` TSR 0.06→0.93.
+- **LocoTrack's CMDTop architecture** (local-to-global correlation) does not translate to a
+  measurable TSR advantage over CoTracker3 on OPT — both are near ceiling for 2D mask tracking.
+- **Gap vs M3T**: 2D trackers plateau around TSR≈0.95. M3T's ADD-AUC=16.02/20 measures 6DoF pose
+  accuracy — a fundamentally harder task requiring 3D model understanding that 2D trackers cannot
+  provide without EPnP + mesh files.
+- **Speed tradeoff**: LocoTrack is ~5× slower per frame than CoTracker3 on MI300X (180 ms vs
+  33 ms) with equal accuracy — CoTracker3 is the better choice when throughput matters.
+
+---
+
+## 5. M3T Reference Numbers (Stoiber 2023, Table 3.3)
+
+Full comparison against prior art from the thesis:
 
 | Approach | Soda | Chest | Ironman | House | Bike | Jet | Avg |
 |---|---|---|---|---|---|---|---|
@@ -81,149 +145,66 @@ The **AUC** score integrates the success-rate curve over kₑ ∈ [0, 0.2], givi
 | J.-C. Li'21 | 9.00 | 14.92 | 13.44 | 13.60 | 12.85 | 10.64 | 12.41 |
 | Huang'22 | 9.07 | 12.93 | 8.80 | 11.15 | 7.96 | 11.09 | 10.17 |
 | **M3T** | **15.55** | **17.29** | **17.50** | 16.57 | **13.06** | 16.14 | **16.02** |
-| **CoTracker2+EPnP** | — | — | — | — | — | — | — |
-
----
-
-## 4. CoTracker2 + EPnP Pipeline
-
-### 4.1 Initialization (frame 0 of each sequence)
-
-1. Sample **N=200** vertices from the object's .obj mesh uniformly at random (seed=42).
-2. Project them onto frame 0 using the GT pose + camera intrinsics → initial 2D positions.
-3. Discard points with `z ≤ 0` or outside image bounds.
-4. These become the CoTracker2 **query points**: `queries[i] = (frame=0, x_i, y_i)`.
-
-### 4.2 Tracking (CoTracker2 offline, window W=8)
-
-```
-CoTracker2("cotracker2", pretrained=True)  ← stride=4, window=8
-  input:  (1, T, 3, H, W) float32 tensor
-  output: tracks (T, N, 2)  visibility (T, N) in [0, 1]
-```
-
-Tracks are accepted when `visibility > 0.5` and pixel is inside the image.
-
-### 4.3 Pose recovery (EPnP + RANSAC, each frame t ≥ 1)
-
-```python
-visible_3d = pts3d[visible_mask]       # known 3D mesh vertices
-visible_2d = tracks[t][visible_mask]   # predicted 2D pixels
-R, t = cv2.solvePnPRansac(
-    visible_3d, visible_2d, K, None,
-    flags=SOLVEPNP_EPNP,
-    confidence=0.99, reprojectionError=8.0,
-)
-```
-
-Falls back to the previous frame's pose if `< 4` points are visible.
-
-### 4.4 ADD-AUC computation
-
-```python
-G = geometry2body_pose(body_name)       # pure translation offset
-delta = inv(pose_pred @ G) @ pose_gt @ G
-error = mean(‖vᵢ − (R_δ·vᵢ + t_δ)‖) over 1000 sampled vertices
-auc_frame = 0.2 * (1 - min(error / (diameter * 0.2), 1))
-```
-
-Final AUC is averaged over all frames in all sequences for each object × 20 for paper scale.
-
----
-
-## 5. Downloading the OPT Dataset
-
-```bash
-# Official dataset page: http://media.ee.ntu.edu.tw/research/OPT/
-# Download and extract to:
-mkdir -p /mnt/data/mritunjoyh/datasets/opt
-
-# Expected layout after extraction:
-# /mnt/data/mritunjoyh/datasets/opt/
-#   Model3D/
-#     soda/soda.obj
-#     chest/chest.obj  ...
-#   3D/
-#     poses/
-#       so_tr_1_b.txt  so_tr_1_f.txt  ...
-#     so_tr_1_b/
-#       color/0001.png  0002.png  ...
-#       depth/0001.png  0002.png  ...
-#     so_tr_1_f/ ...
-```
-
-Estimated disk usage: **~8.5 GB** (well within the 15 GB budget).
 
 ---
 
 ## 6. Running the Evaluation
 
-```bash
-# Download cotracker2 checkpoint (cached automatically on first run)
-conda run -n graspmas python3 evaluate_cotracker_opt.py \
-    --dataset /mnt/data/mritunjoyh/datasets/opt \
-    --output  ./cotracker2_opt_results.json
+All evaluation scripts are in `co-tracker/`. Run in the `graspmas` conda environment on AMD MI300X.
 
-# Partial run (single object, quick sanity check):
-conda run -n graspmas python3 evaluate_cotracker_opt.py \
-    --dataset  /mnt/data/mritunjoyh/datasets/opt \
-    --bodies   ironman \
-    --patterns tr_1 tr_2 \
-    --output   ./cotracker2_opt_ironman_partial.json
+### CoTracker2
+
+```bash
+HIP_VISIBLE_DEVICES=1 conda run -n graspmas python3 evaluate_cotracker_opt.py
+# Results written to: cotracker2_opt_results.json
 ```
 
-Results are reported as **AUC × 20** to match the paper scale.
+### CoTracker3 (parallelised across 3 GPUs)
+
+```bash
+# GPU 1: soda + chest
+HIP_VISIBLE_DEVICES=1 nohup conda run -n graspmas python3 evaluate_cotracker3_opt.py \
+    --bodies soda chest --output ct3_gpu1.json > ct3_gpu1.log 2>&1 &
+
+# GPU 2: ironman + house
+HIP_VISIBLE_DEVICES=2 nohup conda run -n graspmas python3 evaluate_cotracker3_opt.py \
+    --bodies ironman house --output ct3_gpu2.json > ct3_gpu2.log 2>&1 &
+
+# GPU 3: bike + jet
+HIP_VISIBLE_DEVICES=3 nohup conda run -n graspmas python3 evaluate_cotracker3_opt.py \
+    --bodies bike jet --output ct3_gpu3.json > ct3_gpu3.log 2>&1 &
+
+# Merge results
+python3 merge_results.py ct3_gpu1.json ct3_gpu2.json ct3_gpu3.json cotracker3_opt_results.json
+```
+
+### LocoTrack (parallelised across 3 GPUs)
+
+```bash
+# Same GPU split as CoTracker3; replace evaluate_cotracker3_opt.py → evaluate_locotrack_opt.py
+# Output per-object JSONs: lt_soda.json  lt_chest.json  lt_ironman.json  lt_house.json  lt_bike.json  lt_jet.json
+python3 merge_results.py lt_soda.json lt_chest.json lt_ironman.json \
+    lt_house.json lt_bike.json lt_jet.json locotrack_opt_results.json
+```
+
+### GPU monitoring (AMD MI300X — use rocm-smi, not nvtop)
+
+```bash
+watch -n 2 rocm-smi
+```
+
+`nvtop` always shows 0% on MI300X because it reads the DRM interface; the actual KFD
+compute interface is only visible via `rocm-smi`.
 
 ---
 
-## 7. Expected Performance Analysis
-
-### 7.1 Why CoTracker2 will underperform M3T
-
-| Failure mode | Impact on OPT |
-|---|---|
-| No model-in-the-loop | CoTracker2 tracks the whole scene; background regions can pull 2D tracks off the object, corrupting PnP. |
-| Window boundary drift | Each W=8 seam introduces a small pose jump. Over 100+ frames this accumulates. |
-| Textureless regions | Soda (white cylinder) and Bike (uniform plastic) have almost no texture → CoTracker2 tracks fail inside the object silhouette. |
-| Motion blur | OPT has dedicated blur sequences. CoTracker2's correlation window degrades with blur; M3T's region-based approach is more robust. |
-| No depth | M3T uses the RGB-D camera. CoTracker2 is RGB-only, losing the depth constraint that stabilises scale/translation. |
-| EPnP sensitivity | With only ~50–100 visible points after pruning, EPnP under RANSAC is noisy. M3T fits hundreds of region lines simultaneously. |
-
-### 7.2 Per-object prediction
-
-| Object | Key challenge | Expected CoTracker2 AUC [0–20] |
-|---|---|---|
-| Soda | Rotationally symmetric + minimal texture | 2–5 |
-| Chest | Rich surface texture → most trackable | 8–12 |
-| Ironman | Detailed surface, good texture | 7–11 |
-| House | White walls, textureless + symmetric ambiguity | 3–7 |
-| Bike | Thin structure, partial self-occlusion | 5–9 |
-| Jet | Complex shape, some texture | 6–10 |
-| **Average** | | **~5–9** |
-
-Compare to M3T average of **16.02** — CoTracker2+EPnP is expected to trail by roughly 7–11 AUC points.
-
-### 7.3 Motion pattern breakdown
-
-| Pattern | Expected behaviour |
-|---|---|
-| Translation (tr_*) | Relatively stable; 2D tracks shift linearly → EPnP works well |
-| Zoom (zo_*) | Scale change within single window → EPnP handles depth change poorly |
-| In-plane rotation (ir_*) | Features rotate in-plane → tracks stay on object, PnP stable |
-| Out-of-plane rotation (or_*) | Self-occlusion changes which vertices are visible each frame |
-| Flashing light (fl) | Sudden illumination changes corrupt CoTracker2 correlations |
-| Moving light (ml) | Gradual shading changes, moderate degradation |
-| Free motion (fm) | Combined challenges, worst case for CoTracker2 |
-
----
-
-## 8. Architecture Comparison
+## 7. Architecture Comparison
 
 ```
 M3T (Region + Depth + Texture):
   Previous pose estimate
        │
-       ├── Region modality: silhouette rendered → N=200 line segments
+       ├── Region modality: rendered silhouette → N=200 line segments
        │   sample foreground/background histograms → Gauss-Newton gradient
        │
        ├── Depth modality: depth image → N=200 surface points
@@ -233,96 +214,129 @@ M3T (Region + Depth + Texture):
            → Gauss-Newton gradient
                  │
                  ▼
-       Joint Gauss-Newton optimisation (4 corr × 2 update iter)
+       Joint Gauss-Newton optimisation (4 corrections × 2 update iterations)
                  │
                  ▼
-       New 6DoF pose  ──────────────────── ~3 ms/frame, 1 CPU core, no GPU
+       New 6DoF pose  ─── ~3–5 ms/frame, 1 CPU core, no GPU
 
 
-CoTracker2 + EPnP:
-  Previous 2D track positions  (N=200 query pts)
+CoTracker3 (offline, W=60 sliding window):
+  Query points initialised from GT mask (N=200) at frame 0
        │
        ▼
-  CoTracker2 sliding window (W=8, stride=4)  ─── GPU required
+  Transformer with 60-frame context window (stride=1)
        │
        ▼
-  Predicted 2D positions + visibility scores (T × N × 2)
+  2D tracks (T×N×2) + visibility scores  ─── ~33 ms/frame, GPU
+
+
+LocoTrack (TAPIR + CMDTop local correlation):
+  Query points initialised from GT mask (N=200) at frame 0
        │
        ▼
-  EPnP RANSAC with 3D correspondences
+  Local feature volumes (pyramid) + CMDTop global aggregation
        │
        ▼
-  New 6DoF pose  ──────────────────────── ~100–300 ms/frame, GPU
+  2D tracks (T×N×2) + occlusion logits  ─── ~180 ms/frame, GPU
 ```
 
 ### Core architectural difference
 
-M3T **iteratively refines** the pose by comparing the rendered model against the actual image at
-every frame. It knows exactly which image pixels belong to the object boundary (via silhouette
-rendering) and only uses those for fitting. CoTracker2 has no such model awareness — it tracks
-whatever it finds in the image, and relies on EPnP to back-project into 6DoF. This indirect
-chain (2D→EPnP) is inherently less accurate than direct model-image comparison.
+M3T **directly fits** its 3D model to each image by comparing rendered silhouettes and depth maps
+against the actual image — it is intrinsically model-aware and knows exactly which pixels belong
+to the object boundary. CoTracker2/3 and LocoTrack are model-agnostic dense trackers: they follow
+2D image patches forward through time with no 3D understanding. This makes them faster to deploy
+(no mesh needed) but unable to produce 6DoF pose without an additional PnP step.
 
 ---
 
-## 9. Results Summary
+## 8. Wan2.1 Manipulation Video Tracking
 
-> **Metric note:** M3T is evaluated with ADD-AUC [0–20] (requires 3D mesh + EPnP pose recovery).
-> CoTracker2 is evaluated with **Track Success Rate (TSR) [0–1]** — fraction of mask-initialized
-> 2D tracks that remain on the object per frame, averaged over all sequences.
-> These are different metrics; direct numerical comparison is not valid, but the table below
-> shows CoTracker2's 2D tracking quality alongside M3T's 6DoF pose accuracy.
+CoTracker3 was also run on 26 robot manipulation videos generated by Wan2.1.
 
-### 9.1 M3T ADD-AUC [0–20] vs CoTracker2 TSR [0–1]
+### Dataset
 
-| Object  | M3T ADD-AUC [0–20] | CoTracker2 TSR [0–1] |
-|---------|-------------------|----------------------|
-| Soda    | 15.55             | **0.678**            |
-| Chest   | 17.29             | **0.671**            |
-| Ironman | 17.50             | **0.615**            |
-| House   | 16.57             | **0.656**            |
-| Bike    | 13.06             | **0.645**            |
-| Jet     | 16.14             | **0.587**            |
-| **Average** | **16.02**     | **0.642**            |
-
-### 9.2 CoTracker2 TSR breakdown by motion pattern
-
-| Motion type | Typical TSR | Notes |
+| Category | Videos | Object tracked |
 |---|---|---|
-| Translation (tr_*) | ~0.93–0.98 | Smooth linear motion — CoTracker excels |
-| Zoom (zo_1, slow) | ~0.004–0.62 | First zoom sequence always fails; scale change breaks tracks |
-| Zoom (zo_2–5, fast) | ~0.91–0.99 | Shorter sequences, tracks recover |
-| In-plane rotation (ir_1, slow) | ~0.06–0.23 | Long rotation causes drift out of mask |
-| In-plane rotation (ir_2–5) | ~0.90–0.95 | Shorter sequences handle well |
-| Out-of-plane rotation (or_1) | ~0.31–0.34 | Severe self-occlusion causes mass track loss |
-| Out-of-plane rotation (or_2–5) | ~0.85–0.97 | Partial rotations, good recovery |
-| Flashing light (fl) | ~0.94–0.98 | Illumination changes handled well |
-| Moving light (ml) | ~0.94–0.98 | Gradual shading — robust |
-| Free motion (fm) | ~0.54–0.59 | Worst case: combined challenges |
+| drop | 6 (including 1 duplicate) | Red bowl |
+| lid | 5 | Lid handle |
+| pick-place | 5 | Handwash bottle |
+| pour | 5 | Jug / kettle |
+| rolling | 5 | Ball |
 
-### 9.3 Key observations
+Videos are at `/mnt/data/mritunjoyh/Wan2.1/outputs/*.mp4`.
+Tracked outputs are at `/mnt/data/mritunjoyh/Wan2.1/outputs/output_wan/*_tracked.mp4`.
 
-- **CoTracker2 is a strong 2D tracker** — 0.642 average TSR across 552 sequences means
-  64% of mask-initialized tracks stay on the object at every frame.
-- **Zoom and slow rotation are failure modes**: the `zo_1` and `ir_1` sequences (340–369 frames,
-  very slow motion) cause near-total track loss as points gradually drift off the object boundary.
-- **M3T's model-in-the-loop advantage**: M3T re-renders the object silhouette at each frame and
-  fits to it directly. CoTracker2 has no such feedback — once tracks drift off the object, there
-  is no correction mechanism.
-- **Free motion (fm)** is the hardest pattern for CoTracker2 (TSR ~0.55–0.59), consistent with
-  the prediction in Section 7.
+### Pipeline
+
+1. **Bounding box selection** (`select_bboxes.py`): interactive `cv2.selectROI` over frame 0 of
+   each video (requires SSH with X11 forwarding: `ssh -Y`). Boxes saved to `bboxes.json`.
+
+2. **Tracking** (`track_from_bboxes.py`): reads `bboxes.json`, samples 200 points uniformly
+   inside each bbox, runs CoTracker3 offline, writes visualised `*_tracked.mp4`.
+
+```bash
+# Draw boxes (requires X11)
+conda run -n graspmas python3 /mnt/data/mritunjoyh/Wan2.1/select_bboxes.py
+
+# Track all videos
+HIP_VISIBLE_DEVICES=1 conda run -n graspmas python3 /mnt/data/mritunjoyh/Wan2.1/track_from_bboxes.py
+```
+
+### Bounding boxes (from bboxes.json, format: [x1, y1, x2, y2])
+
+| Video | Bbox |
+|---|---|
+| drop_1.mp4 | [6, 376, 140, 425] |
+| drop_2.mp4 | [15, 370, 127, 432] |
+| drop_3.mp4 | [9, 371, 131, 425] |
+| drop_4.mp4 | [20, 364, 128, 429] |
+| drop_5.mp4 | [20, 369, 117, 433] |
+| lid_1.mp4 | [127, 360, 200, 376] |
+| lid_2.mp4 | [129, 353, 193, 381] |
+| lid_3.mp4 | [129, 362, 184, 380] |
+| lid_4.mp4 | [131, 354, 188, 385] |
+| lid_5.mp4 | [128, 364, 179, 387] |
+| pick-place_1.mp4 | [101, 254, 157, 406] |
+| pick-place_2.mp4 | [104, 255, 160, 369] |
+| pick-place_3.mp4 | [90, 256, 173, 438] |
+| pick-place_4.mp4 | [93, 270, 167, 432] |
+| pick-place_5.mp4 | [100, 284, 168, 476] |
+| pour_1.mp4 | [106, 186, 233, 421] |
+| pour_2.mp4 | [101, 177, 230, 427] |
+| pour_3.mp4 | [97, 174, 232, 405] |
+| pour_4.mp4 | [97, 179, 237, 411] |
+| pour_5.mp4 | [97, 178, 233, 415] |
+| rolling_1.mp4 | [69, 302, 178, 402] |
+| rolling_2.mp4 | [77, 285, 178, 388] |
+| rolling_3.mp4 | [80, 285, 192, 400] |
+| rolling_4.mp4 | [76, 292, 182, 400] |
+| rolling_5.mp4 | [78, 285, 182, 394] |
+
+### Viewing outputs
+
+```bash
+# Start HTTP server
+cd /mnt/data/mritunjoyh/Wan2.1/outputs/output_wan
+python3 -m http.server 8081
+
+# SSH tunnel on your local machine
+ssh -L 8081:localhost:8081 mritunjoyh@<server-ip>
+
+# Open browser → http://localhost:8081
+```
 
 ---
 
-## 10. References
+## 9. References
 
 - Stoiber M (2023). *Closing the Loop: 3D Object Tracking for Advanced Robotic Manipulation.*
   Dissertation, TU Munich.
 - Wu B et al. (2017). *OPT: One-Pass Tracker.* ICCV 2017.
 - Karaev N et al. (2023). *CoTracker: It is Better to Track Together.* ECCV 2024.
-- Lepetit V, Moreno-Noguer F, Fua P (2009). *EPnP: An Accurate O(n) Solution to the PnP
-  Problem.* IJCV 77(2).
-- Bugaev D et al. (2018). *3D Object Tracking with Adaptively Weighted Local Bundles.*
-  BMVC 2018.
-- Mur-Artal R, Tardós JD (2017). *ORB-SLAM2: An Open-Source SLAM System for Monocular,
-  Stereo, and RGB-D Cameras.* IEEE T-RO.
+- Doersch C et al. (2023). *TAPIR: Tracking Any Point with per-frame Initialization and temporal
+  Refinement.* ICCV 2023.
+- Song Y et al. (2024). *LocoTrack: Local-to-Global Correlation for 2D Point Tracking.* ECCV 2024.
+- Bugaev D et al. (2018). *3D Object Tracking with Adaptively Weighted Local Bundles.* BMVC 2018.
+- Mur-Artal R, Tardós JD (2017). *ORB-SLAM2: An Open-Source SLAM System for Monocular, Stereo,
+  and RGB-D Cameras.* IEEE T-RO.
