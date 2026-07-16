@@ -1,0 +1,106 @@
+Device: cuda
+GPU: AMD Instinct MI300X
+
+============================================================
+Object: bike
+  bi_tr_1_b ... Loading LocoTrack-base weights...
+TSR=0.967  frames=173  t=31.1s
+  bi_tr_2_b ... TSR=0.939  frames=60  t=14.7s
+  bi_tr_3_b ... TSR=0.963  frames=37  t=11.5s
+  bi_tr_4_b ... TSR=0.935  frames=26  t=8.7s
+  bi_tr_5_b ... TSR=0.943  frames=22  t=7.7s
+  bi_zo_1_b ... TSR=0.969  frames=340  t=98.7s
+  bi_zo_2_b ... TSR=0.954  frames=118  t=29.9s
+  bi_zo_3_b ... TSR=0.951  frames=75  t=20.3s
+  bi_zo_4_b ... TSR=0.947  frames=54  t=16.2s
+  bi_zo_5_b ... TSR=0.955  frames=43  t=13.0s
+  bi_ir_1_b ... TSR=0.949  frames=369  t=72.1s
+  bi_ir_2_b ... TSR=0.937  frames=126  t=33.8s
+  bi_ir_3_b ... TSR=0.951  frames=77  t=21.8s
+  bi_ir_4_b ... TSR=0.935  frames=52  t=14.9s
+  bi_ir_5_b ... TSR=0.932  frames=40  t=12.2s
+  bi_or_1_b ... TSR=0.970  frames=599  t=102.1s
+  bi_or_2_b ... TSR=0.973  frames=201  t=51.3s
+  bi_or_3_b ... TSR=0.964  frames=122  t=30.9s
+  bi_or_4_b ... TSR=0.962  frames=84  t=12.8s
+  bi_or_5_b ... TSR=0.948  frames=63  t=17.9s
+  bi_fl_b ... TSR=0.972  frames=153  t=42.1s
+  bi_ml_b ... TSR=0.972  frames=153  t=7.9s
+  bi_fm_b ... TSR=0.925  frames=322  t=52.9s
+  bi_tr_1_f ... TSR=0.957  frames=173  t=8.7s
+  bi_tr_2_f ... TSR=0.956  frames=60  t=3.0s
+  bi_tr_3_f ... TSR=0.944  frames=37  t=1.6s
+  bi_tr_4_f ... TSR=0.941  frames=26  t=1.3s
+  bi_tr_5_f ... TSR=0.930  frames=22  t=1.5s
+  bi_zo_1_f ... TSR=0.973  frames=340  t=14.2s
+  bi_zo_2_f ... TSR=0.970  frames=118  t=4.9s
+  bi_zo_3_f ... TSR=0.976  frames=75  t=2.5s
+  bi_zo_4_f ... TSR=0.970  frames=54  t=1.3s
+  bi_zo_5_f ... TSR=0.978  frames=43  t=2.1s
+  bi_ir_1_f ... TSR=0.903  frames=369  t=15.2s
+  bi_ir_2_f ... TSR=0.917  frames=126  t=2.2s
+  bi_ir_3_f ... TSR=0.896  frames=77  t=3.3s
+  bi_ir_4_f ... TSR=0.915  frames=52  t=1.9s
+  bi_ir_5_f ... TSR=0.900  frames=40  t=1.7s
+  bi_or_1_f ... TSR=0.953  frames=599  t=19.8s
+  bi_or_2_f ... TSR=0.927  frames=201  t=2.8s
+  bi_or_3_f ... TSR=0.920  frames=122  t=1.6s
+  bi_or_4_f ... TSR=0.901  frames=84  t=3.4s
+  bi_or_5_f ... TSR=0.918  frames=63  t=1.0s
+  bi_fl_f ... TSR=0.973  frames=153  t=5.1s
+  bi_ml_f ... TSR=0.989  frames=153  t=4.0s
+  bi_fm_f ... TSR=0.934  frames=322  t=10.2s
+  bi_tr_1_l ... TSR=0.967  frames=173  t=6.3s
+  bi_tr_2_l ... TSR=0.945  frames=60  t=1.2s
+  bi_tr_3_l ... TSR=0.954  frames=37  t=0.7s
+  bi_tr_4_l ... TSR=0.949  frames=26  t=0.7s
+  bi_tr_5_l ... TSR=0.951  frames=22  t=0.8s
+  bi_zo_1_l ... TSR=0.960  frames=340  t=10.4s
+  bi_zo_2_l ... TSR=0.961  frames=118  t=3.3s
+  bi_zo_3_l ... TSR=0.950  frames=75  t=3.0s
+  bi_zo_4_l ... TSR=0.960  frames=54  t=0.9s
+  bi_zo_5_l ... TSR=0.949  frames=43  t=1.3s
+  bi_ir_1_l ... TSR=0.928  frames=369  t=10.5s
+  bi_ir_2_l ... TSR=0.934  frames=126  t=3.8s
+  bi_ir_3_l ... TSR=0.932  frames=77  t=2.0s
+  bi_ir_4_l ... TSR=0.935  frames=52  t=0.9s
+  bi_ir_5_l ... TSR=0.934  frames=40  t=1.1s
+  bi_or_1_l ... TSR=0.930  frames=599  t=14.0s
+  bi_or_2_l ... TSR=0.920  frames=201  t=5.5s
+  bi_or_3_l ... TSR=0.917  frames=122  t=1.7s
+  bi_or_4_l ... TSR=0.903  frames=84  t=1.8s
+  bi_or_5_l ... TSR=0.908  frames=63  t=0.9s
+  bi_fl_l ... TSR=0.983  frames=153  t=5.1s
+  bi_ml_l ... TSR=0.980  frames=153  t=3.0s
+  bi_fm_l ... TSR=0.940  frames=322  t=7.3s
+  bi_tr_1_r ... TSR=0.967  frames=173  t=3.2s
+  bi_tr_2_r ... TSR=0.970  frames=60  t=2.0s
+  bi_tr_3_r ... TSR=0.966  frames=37  t=1.2s
+  bi_tr_4_r ... TSR=0.964  frames=26  t=0.7s
+  bi_tr_5_r ... TSR=0.971  frames=22  t=0.8s
+  bi_zo_1_r ... TSR=0.968  frames=340  t=7.8s
+  bi_zo_2_r ... TSR=0.952  frames=118  t=4.2s
+  bi_zo_3_r ... TSR=0.969  frames=75  t=2.5s
+  bi_zo_4_r ... TSR=0.969  frames=54  t=1.1s
+  bi_zo_5_r ... TSR=0.965  frames=43  t=0.8s
+  bi_ir_1_r ... TSR=0.932  frames=369  t=7.2s
+  bi_ir_2_r ... TSR=0.933  frames=126  t=2.8s
+  bi_ir_3_r ... TSR=0.952  frames=77  t=2.1s
+  bi_ir_4_r ... TSR=0.947  frames=52  t=1.3s
+  bi_ir_5_r ... TSR=0.943  frames=40  t=1.4s
+  bi_or_1_r ... TSR=0.929  frames=599  t=12.8s
+  bi_or_2_r ... TSR=0.935  frames=201  t=2.7s
+  bi_or_3_r ... TSR=0.933  frames=122  t=2.3s
+  bi_or_4_r ... TSR=0.929  frames=84  t=1.8s
+  bi_or_5_r ... TSR=0.926  frames=63  t=1.6s
+  bi_fl_r ... TSR=0.958  frames=153  t=2.4s
+  bi_ml_r ... TSR=0.972  frames=153  t=2.5s
+  bi_fm_r ... TSR=0.944  frames=322  t=5.9s
+  → bike average TSR = 0.947
+
+============================================================
+Final Track Success Rate:
+  bike        : 0.947
+  average     : 0.947
+
+Results saved to /mnt/data/mritunjoyh/3DObjectTracking/co-tracker/lt_bike.json

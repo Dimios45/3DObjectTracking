@@ -1,0 +1,107 @@
+Device: cuda
+GPU: AMD Instinct MI300X
+
+============================================================
+Object: house
+  ho_tr_1_b ... Loading LocoTrack-base weights...
+TSR=0.977  frames=173  t=31.0s
+  ho_tr_2_b ... TSR=0.974  frames=60  t=15.6s
+  ho_tr_3_b ... TSR=0.971  frames=37  t=10.8s
+  ho_tr_4_b ... TSR=0.963  frames=26  t=8.7s
+  ho_tr_5_b ... TSR=0.967  frames=22  t=7.7s
+  ho_zo_1_b ... TSR=0.988  frames=340  t=99.5s
+  ho_zo_2_b ... TSR=0.980  frames=118  t=29.5s
+  ho_zo_3_b ... TSR=0.981  frames=75  t=20.0s
+  ho_zo_4_b ... MIOpen(HIP): Warning [IsEnoughWorkspace] [GetSolutions] Solver <ConvAsmImplicitGemmGTCDynamicFwdXdlopsNHWC>, workspace required: 346030080, provided ptr: 0x7d56c5e00000 size: 173015040
+TSR=0.981  frames=54  t=16.3s
+  ho_zo_5_b ... TSR=0.986  frames=43  t=12.8s
+  ho_ir_1_b ... TSR=0.970  frames=369  t=72.0s
+  ho_ir_2_b ... TSR=0.973  frames=126  t=33.8s
+  ho_ir_3_b ... TSR=0.965  frames=77  t=22.1s
+  ho_ir_4_b ... TSR=0.970  frames=52  t=14.9s
+  ho_ir_5_b ... TSR=0.971  frames=40  t=12.1s
+  ho_or_1_b ... TSR=0.982  frames=599  t=102.3s
+  ho_or_2_b ... TSR=0.978  frames=201  t=50.8s
+  ho_or_3_b ... TSR=0.949  frames=122  t=31.3s
+  ho_or_4_b ... TSR=0.938  frames=84  t=12.7s
+  ho_or_5_b ... TSR=0.926  frames=63  t=17.9s
+  ho_fl_b ... TSR=0.988  frames=153  t=42.1s
+  ho_ml_b ... TSR=0.987  frames=153  t=7.7s
+  ho_fm_b ... TSR=0.928  frames=322  t=53.4s
+  ho_tr_1_f ... TSR=0.986  frames=173  t=8.3s
+  ho_tr_2_f ... TSR=0.989  frames=60  t=2.7s
+  ho_tr_3_f ... TSR=0.986  frames=37  t=1.6s
+  ho_tr_4_f ... TSR=0.983  frames=26  t=1.0s
+  ho_tr_5_f ... TSR=0.979  frames=22  t=1.1s
+  ho_zo_1_f ... TSR=0.986  frames=340  t=15.5s
+  ho_zo_2_f ... TSR=0.970  frames=118  t=5.1s
+  ho_zo_3_f ... TSR=0.968  frames=75  t=2.8s
+  ho_zo_4_f ... TSR=0.972  frames=54  t=2.5s
+  ho_zo_5_f ... TSR=0.980  frames=43  t=2.3s
+  ho_ir_1_f ... TSR=0.973  frames=369  t=14.5s
+  ho_ir_2_f ... TSR=0.978  frames=126  t=4.7s
+  ho_ir_3_f ... TSR=0.968  frames=77  t=3.2s
+  ho_ir_4_f ... TSR=0.957  frames=52  t=2.4s
+  ho_ir_5_f ... TSR=0.960  frames=40  t=1.7s
+  ho_or_1_f ... TSR=0.989  frames=599  t=19.3s
+  ho_or_2_f ... TSR=0.988  frames=201  t=5.7s
+  ho_or_3_f ... TSR=0.966  frames=122  t=4.2s
+  ho_or_4_f ... TSR=0.967  frames=84  t=2.7s
+  ho_or_5_f ... TSR=0.971  frames=63  t=1.5s
+  ho_fl_f ... TSR=0.970  frames=153  t=5.9s
+  ho_ml_f ... TSR=0.972  frames=153  t=4.0s
+  ho_fm_f ... TSR=0.969  frames=322  t=9.9s
+  ho_tr_1_l ... TSR=0.989  frames=173  t=6.7s
+  ho_tr_2_l ... TSR=0.976  frames=60  t=1.5s
+  ho_tr_3_l ... TSR=0.976  frames=37  t=0.9s
+  ho_tr_4_l ... TSR=0.969  frames=26  t=0.7s
+  ho_tr_5_l ... TSR=0.978  frames=22  t=0.6s
+  ho_zo_1_l ... TSR=0.967  frames=340  t=10.1s
+  ho_zo_2_l ... TSR=0.966  frames=118  t=4.7s
+  ho_zo_3_l ... TSR=0.963  frames=75  t=1.5s
+  ho_zo_4_l ... TSR=0.959  frames=54  t=0.9s
+  ho_zo_5_l ... TSR=0.968  frames=43  t=0.7s
+  ho_ir_1_l ... TSR=0.948  frames=369  t=9.1s
+  ho_ir_2_l ... TSR=0.936  frames=126  t=3.5s
+  ho_ir_3_l ... TSR=0.919  frames=77  t=2.5s
+  ho_ir_4_l ... TSR=0.934  frames=52  t=2.0s
+  ho_ir_5_l ... TSR=0.930  frames=40  t=1.2s
+  ho_or_1_l ... TSR=0.977  frames=599  t=14.8s
+  ho_or_2_l ... TSR=0.983  frames=201  t=6.7s
+  ho_or_3_l ... TSR=0.967  frames=122  t=2.2s
+  ho_or_4_l ... TSR=0.952  frames=84  t=3.2s
+  ho_or_5_l ... TSR=0.934  frames=63  t=1.3s
+  ho_fl_l ... TSR=0.989  frames=153  t=3.0s
+  ho_ml_l ... TSR=0.982  frames=153  t=4.7s
+  ho_fm_l ... TSR=0.949  frames=322  t=8.8s
+  ho_tr_1_r ... TSR=0.990  frames=173  t=5.8s
+  ho_tr_2_r ... TSR=0.989  frames=60  t=1.9s
+  ho_tr_3_r ... TSR=0.980  frames=37  t=0.7s
+  ho_tr_4_r ... TSR=0.986  frames=26  t=0.6s
+  ho_tr_5_r ... TSR=0.978  frames=22  t=0.4s
+  ho_zo_1_r ... TSR=0.977  frames=340  t=7.8s
+  ho_zo_2_r ... TSR=0.981  frames=118  t=2.8s
+  ho_zo_3_r ... TSR=0.984  frames=75  t=2.3s
+  ho_zo_4_r ... TSR=0.984  frames=54  t=2.2s
+  ho_zo_5_r ... TSR=0.985  frames=43  t=1.3s
+  ho_ir_1_r ... TSR=0.959  frames=369  t=8.5s
+  ho_ir_2_r ... TSR=0.955  frames=126  t=2.1s
+  ho_ir_3_r ... TSR=0.973  frames=77  t=1.3s
+  ho_ir_4_r ... TSR=0.972  frames=52  t=0.9s
+  ho_ir_5_r ... TSR=0.944  frames=40  t=1.2s
+  ho_or_1_r ... TSR=0.970  frames=599  t=12.4s
+  ho_or_2_r ... TSR=0.984  frames=201  t=4.7s
+  ho_or_3_r ... TSR=0.971  frames=122  t=2.0s
+  ho_or_4_r ... TSR=0.934  frames=84  t=1.4s
+  ho_or_5_r ... TSR=0.948  frames=63  t=0.9s
+  ho_fl_r ... TSR=0.976  frames=153  t=2.4s
+  ho_ml_r ... TSR=0.987  frames=153  t=2.4s
+  ho_fm_r ... TSR=0.974  frames=322  t=5.4s
+  → house average TSR = 0.972
+
+============================================================
+Final Track Success Rate:
+  house       : 0.972
+  average     : 0.972
+
+Results saved to /mnt/data/mritunjoyh/3DObjectTracking/co-tracker/lt_house.json

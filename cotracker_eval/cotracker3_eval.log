@@ -1,0 +1,18 @@
+nohup: ignoring input
+Device: cuda
+GPU: AMD Instinct MI300X
+
+============================================================
+Object: soda
+  so_tr_1_b ... TSR=0.985  frames=173  t=34.3s
+  so_tr_2_b ... TSR=0.988  frames=60  t=6.5s
+  so_tr_3_b ... TSR=0.981  frames=37  t=4.1s
+  so_tr_4_b ... TSR=0.976  frames=26  t=3.0s
+  so_tr_5_b ... TSR=0.975  frames=22  t=2.7s
+  so_zo_1_b ... TSR=0.988  frames=340  t=18.4s
+  so_zo_2_b ... TSR=0.986  frames=118  t=12.4s
+  so_zo_3_b ... TSR=0.989  frames=75  t=8.0s
+  so_zo_4_b ... TSR=0.991  frames=54  t=6.0s
+  so_zo_5_b ... TSR=0.989  frames=43  t=4.9s
+  so_ir_1_b ... TSR=0.971  frames=369  t=19.8s
+  so_ir_2_b ... 

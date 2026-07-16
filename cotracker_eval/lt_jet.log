@@ -1,0 +1,106 @@
+Device: cuda
+GPU: AMD Instinct MI300X
+
+============================================================
+Object: jet
+  je_tr_1_b ... Loading LocoTrack-base weights...
+TSR=0.954  frames=173  t=31.1s
+  je_tr_2_b ... TSR=0.925  frames=60  t=14.9s
+  je_tr_3_b ... TSR=0.920  frames=37  t=11.3s
+  je_tr_4_b ... TSR=0.901  frames=26  t=8.8s
+  je_tr_5_b ... TSR=0.904  frames=22  t=7.6s
+  je_zo_1_b ... TSR=0.897  frames=340  t=99.5s
+  je_zo_2_b ... TSR=0.910  frames=118  t=29.1s
+  je_zo_3_b ... TSR=0.913  frames=75  t=20.6s
+  je_zo_4_b ... TSR=0.916  frames=54  t=16.1s
+  je_zo_5_b ... TSR=0.893  frames=43  t=13.0s
+  je_ir_1_b ... TSR=0.887  frames=369  t=74.5s
+  je_ir_2_b ... TSR=0.880  frames=126  t=31.5s
+  je_ir_3_b ... TSR=0.866  frames=77  t=21.8s
+  je_ir_4_b ... TSR=0.880  frames=52  t=14.7s
+  je_ir_5_b ... TSR=0.887  frames=40  t=12.1s
+  je_or_1_b ... TSR=0.926  frames=599  t=104.0s
+  je_or_2_b ... TSR=0.906  frames=201  t=51.2s
+  je_or_3_b ... TSR=0.916  frames=122  t=29.2s
+  je_or_4_b ... TSR=0.894  frames=84  t=12.8s
+  je_or_5_b ... TSR=0.870  frames=63  t=17.7s
+  je_fl_b ... TSR=0.954  frames=153  t=42.7s
+  je_ml_b ... TSR=0.936  frames=153  t=7.6s
+  je_fm_b ... TSR=0.840  frames=322  t=53.1s
+  je_tr_1_f ... TSR=0.937  frames=173  t=8.2s
+  je_tr_2_f ... TSR=0.944  frames=60  t=2.7s
+  je_tr_3_f ... TSR=0.925  frames=37  t=1.6s
+  je_tr_4_f ... TSR=0.911  frames=26  t=1.0s
+  je_tr_5_f ... TSR=0.883  frames=22  t=0.8s
+  je_zo_1_f ... TSR=0.899  frames=340  t=14.3s
+  je_zo_2_f ... TSR=0.908  frames=118  t=2.1s
+  je_zo_3_f ... TSR=0.897  frames=75  t=3.7s
+  je_zo_4_f ... TSR=0.916  frames=54  t=1.2s
+  je_zo_5_f ... TSR=0.908  frames=43  t=1.7s
+  je_ir_1_f ... TSR=0.882  frames=369  t=11.4s
+  je_ir_2_f ... TSR=0.901  frames=126  t=4.7s
+  je_ir_3_f ... TSR=0.895  frames=77  t=1.5s
+  je_ir_4_f ... TSR=0.905  frames=52  t=0.7s
+  je_ir_5_f ... TSR=0.888  frames=40  t=0.8s
+  je_or_1_f ... TSR=0.899  frames=599  t=15.9s
+  je_or_2_f ... TSR=0.883  frames=201  t=7.3s
+  je_or_3_f ... TSR=0.880  frames=122  t=3.9s
+  je_or_4_f ... TSR=0.875  frames=84  t=1.2s
+  je_or_5_f ... TSR=0.868  frames=63  t=1.1s
+  je_fl_f ... TSR=0.948  frames=153  t=2.2s
+  je_ml_f ... TSR=0.961  frames=153  t=4.5s
+  je_fm_f ... TSR=0.859  frames=322  t=7.7s
+  je_tr_1_l ... TSR=0.944  frames=173  t=3.3s
+  je_tr_2_l ... TSR=0.937  frames=60  t=2.4s
+  je_tr_3_l ... TSR=0.922  frames=37  t=1.4s
+  je_tr_4_l ... TSR=0.899  frames=26  t=0.9s
+  je_tr_5_l ... TSR=0.898  frames=22  t=0.7s
+  je_zo_1_l ... TSR=0.949  frames=340  t=6.7s
+  je_zo_2_l ... TSR=0.945  frames=118  t=3.5s
+  je_zo_3_l ... TSR=0.946  frames=75  t=1.4s
+  je_zo_4_l ... TSR=0.952  frames=54  t=0.9s
+  je_zo_5_l ... TSR=0.955  frames=43  t=1.3s
+  je_ir_1_l ... TSR=0.874  frames=369  t=10.5s
+  je_ir_2_l ... TSR=0.887  frames=126  t=3.1s
+  je_ir_3_l ... TSR=0.883  frames=77  t=2.7s
+  je_ir_4_l ... TSR=0.868  frames=52  t=0.9s
+  je_ir_5_l ... TSR=0.857  frames=40  t=0.6s
+  je_or_1_l ... TSR=0.901  frames=599  t=12.9s
+  je_or_2_l ... TSR=0.901  frames=201  t=4.8s
+  je_or_3_l ... TSR=0.899  frames=122  t=2.4s
+  je_or_4_l ... TSR=0.909  frames=84  t=2.4s
+  je_or_5_l ... TSR=0.875  frames=63  t=1.2s
+  je_fl_l ... TSR=0.946  frames=153  t=3.7s
+  je_ml_l ... TSR=0.932  frames=153  t=2.7s
+  je_fm_l ... TSR=0.843  frames=322  t=7.5s
+  je_tr_1_r ... TSR=0.952  frames=173  t=2.4s
+  je_tr_2_r ... TSR=0.947  frames=60  t=0.9s
+  je_tr_3_r ... TSR=0.933  frames=37  t=1.1s
+  je_tr_4_r ... TSR=0.931  frames=26  t=0.5s
+  je_tr_5_r ... TSR=0.911  frames=22  t=0.5s
+  je_zo_1_r ... TSR=0.932  frames=340  t=8.7s
+  je_zo_2_r ... TSR=0.930  frames=118  t=2.3s
+  je_zo_3_r ... TSR=0.939  frames=75  t=2.2s
+  je_zo_4_r ... TSR=0.946  frames=54  t=1.6s
+  je_zo_5_r ... TSR=0.931  frames=43  t=0.9s
+  je_ir_1_r ... TSR=0.913  frames=369  t=7.3s
+  je_ir_2_r ... TSR=0.901  frames=126  t=4.2s
+  je_ir_3_r ... TSR=0.912  frames=77  t=1.5s
+  je_ir_4_r ... TSR=0.901  frames=52  t=0.8s
+  je_ir_5_r ... TSR=0.906  frames=40  t=1.1s
+  je_or_1_r ... TSR=0.885  frames=599  t=13.3s
+  je_or_2_r ... TSR=0.870  frames=201  t=3.4s
+  je_or_3_r ... TSR=0.878  frames=122  t=2.7s
+  je_or_4_r ... TSR=0.881  frames=84  t=1.7s
+  je_or_5_r ... TSR=0.869  frames=63  t=1.7s
+  je_fl_r ... TSR=0.918  frames=153  t=3.7s
+  je_ml_r ... TSR=0.936  frames=153  t=3.7s
+  je_fm_r ... TSR=0.874  frames=322  t=6.2s
+  → jet average TSR = 0.904
+
+============================================================
+Final Track Success Rate:
+  jet         : 0.904
+  average     : 0.904
+
+Results saved to /mnt/data/mritunjoyh/3DObjectTracking/co-tracker/lt_jet.json

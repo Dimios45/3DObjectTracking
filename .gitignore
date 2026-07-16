@@ -1,0 +1,11 @@
+# Build artifacts
+build/
+build_*/
+ICG/doc/html/
+
+# Nested git clones (custom work salvaged into cotracker_eval/)
+co-tracker/
+
+# Python
+__pycache__/
+*.pyc

@@ -5,9 +5,9 @@
 
 int main() {
   // Directories
-  std::filesystem::path dataset_directory{"/your/path/"};
-  std::filesystem::path external_directory{"/your/path/"};
-  std::filesystem::path result_path{"/your/path/"};
+  std::filesystem::path dataset_directory{"/mnt/data/mritunjoyh/datasets/opt/"};
+  std::filesystem::path external_directory{"/mnt/data/mritunjoyh/datasets/external/opt/"};
+  std::filesystem::path result_path{"/mnt/data/mritunjoyh/datasets/external/opt/"};
 
   // Dataset configuration
   std::vector<std::string> body_names{"soda",  "chest", "ironman",

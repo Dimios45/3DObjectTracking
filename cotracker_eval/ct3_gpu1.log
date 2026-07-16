@@ -1,0 +1,203 @@
+Device: cuda
+GPU: AMD Instinct MI300X
+
+============================================================
+Object: soda
+  so_tr_1_b ... TSR=0.985  frames=173  t=23.2s
+  so_tr_2_b ... TSR=0.988  frames=60  t=2.3s
+  so_tr_3_b ... TSR=0.981  frames=37  t=1.2s
+  so_tr_4_b ... TSR=0.976  frames=26  t=0.9s
+  so_tr_5_b ... TSR=0.975  frames=22  t=0.6s
+  so_zo_1_b ... TSR=0.988  frames=340  t=11.5s
+  so_zo_2_b ... TSR=0.986  frames=118  t=3.7s
+  so_zo_3_b ... TSR=0.989  frames=75  t=1.7s
+  so_zo_4_b ... TSR=0.991  frames=54  t=1.5s
+  so_zo_5_b ... TSR=0.989  frames=43  t=1.3s
+  so_ir_1_b ... TSR=0.971  frames=369  t=11.1s
+  so_ir_2_b ... TSR=0.973  frames=126  t=2.4s
+  so_ir_3_b ... TSR=0.976  frames=77  t=8.2s
+  so_ir_4_b ... TSR=0.979  frames=52  t=6.0s
+  so_ir_5_b ... TSR=0.972  frames=40  t=5.0s
+  so_or_1_b ... TSR=0.919  frames=599  t=18.4s
+  so_or_2_b ... TSR=0.923  frames=201  t=6.6s
+  so_or_3_b ... TSR=0.915  frames=122  t=14.9s
+  so_or_4_b ... TSR=0.893  frames=84  t=10.1s
+  so_or_5_b ... TSR=0.893  frames=63  t=1.0s
+  so_fl_b ... TSR=0.987  frames=153  t=17.9s
+  so_ml_b ... TSR=0.975  frames=153  t=3.9s
+  so_fm_b ... TSR=0.985  frames=322  t=7.9s
+  so_tr_1_f ... TSR=0.992  frames=173  t=1.9s
+  so_tr_2_f ... TSR=0.989  frames=60  t=1.8s
+  so_tr_3_f ... TSR=0.986  frames=37  t=0.7s
+  so_tr_4_f ... TSR=0.983  frames=26  t=0.3s
+  so_tr_5_f ... TSR=0.969  frames=22  t=0.3s
+  so_zo_1_f ... TSR=0.978  frames=340  t=9.1s
+  so_zo_2_f ... TSR=0.994  frames=118  t=1.9s
+  so_zo_3_f ... TSR=0.991  frames=75  t=0.9s
+  so_zo_4_f ... TSR=0.993  frames=54  t=1.5s
+  so_zo_5_f ... TSR=0.994  frames=43  t=0.8s
+  so_ir_1_f ... TSR=0.945  frames=369  t=7.7s
+  so_ir_2_f ... TSR=0.957  frames=126  t=3.3s
+  so_ir_3_f ... TSR=0.976  frames=77  t=0.8s
+  so_ir_4_f ... TSR=0.958  frames=52  t=0.6s
+  so_ir_5_f ... TSR=0.971  frames=40  t=1.2s
+  so_or_1_f ... TSR=0.906  frames=599  t=13.1s
+  so_or_2_f ... TSR=0.915  frames=201  t=3.2s
+  so_or_3_f ... TSR=0.932  frames=122  t=1.2s
+  so_or_4_f ... TSR=0.902  frames=84  t=1.5s
+  so_or_5_f ... TSR=0.909  frames=63  t=1.3s
+  so_fl_f ... TSR=0.988  frames=153  t=1.9s
+  so_ml_f ... TSR=0.984  frames=153  t=2.6s
+  so_fm_f ... TSR=0.962  frames=322  t=7.2s
+  so_tr_1_l ... TSR=0.983  frames=173  t=4.5s
+  so_tr_2_l ... TSR=0.982  frames=60  t=1.1s
+  so_tr_3_l ... TSR=0.977  frames=37  t=0.5s
+  so_tr_4_l ... TSR=0.977  frames=26  t=0.5s
+  so_tr_5_l ... TSR=0.967  frames=22  t=0.5s
+  so_zo_1_l ... TSR=0.977  frames=340  t=6.2s
+  so_zo_2_l ... TSR=0.989  frames=118  t=2.8s
+  so_zo_3_l ... TSR=0.992  frames=75  t=1.3s
+  so_zo_4_l ... TSR=0.988  frames=54  t=1.1s
+  so_zo_5_l ... TSR=0.988  frames=43  t=1.3s
+  so_ir_1_l ... TSR=0.994  frames=369  t=5.3s
+  so_ir_2_l ... TSR=0.986  frames=126  t=2.8s
+  so_ir_3_l ... TSR=0.981  frames=77  t=1.0s
+  so_ir_4_l ... TSR=0.984  frames=52  t=0.8s
+  so_ir_5_l ... TSR=0.987  frames=40  t=1.1s
+  so_or_1_l ... TSR=0.972  frames=599  t=9.5s
+  so_or_2_l ... TSR=0.971  frames=201  t=3.0s
+  so_or_3_l ... TSR=0.968  frames=122  t=2.7s
+  so_or_4_l ... TSR=0.947  frames=84  t=1.6s
+  so_or_5_l ... TSR=0.969  frames=63  t=0.6s
+  so_fl_l ... TSR=0.990  frames=153  t=2.1s
+  so_ml_l ... TSR=0.987  frames=153  t=3.3s
+  so_fm_l ... TSR=0.980  frames=322  t=6.3s
+  so_tr_1_r ... TSR=0.984  frames=173  t=3.4s
+  so_tr_2_r ... TSR=0.985  frames=60  t=0.8s
+  so_tr_3_r ... TSR=0.985  frames=37  t=0.4s
+  so_tr_4_r ... TSR=0.984  frames=26  t=0.3s
+  so_tr_5_r ... TSR=0.963  frames=22  t=0.6s
+  so_zo_1_r ...   [skip] no mask dir for so_zo_1_r
+skipped
+  so_zo_2_r ... TSR=0.968  frames=118  t=2.7s
+  so_zo_3_r ... TSR=0.977  frames=75  t=1.7s
+  so_zo_4_r ... TSR=0.981  frames=54  t=0.9s
+  so_zo_5_r ... TSR=0.993  frames=43  t=0.6s
+  so_ir_1_r ... TSR=0.989  frames=369  t=7.3s
+  so_ir_2_r ... TSR=0.987  frames=126  t=2.6s
+  so_ir_3_r ... TSR=0.953  frames=77  t=1.5s
+  so_ir_4_r ... TSR=0.985  frames=52  t=0.6s
+  so_ir_5_r ... TSR=0.983  frames=40  t=0.5s
+  so_or_1_r ... TSR=0.967  frames=599  t=10.0s
+  so_or_2_r ... TSR=0.966  frames=201  t=2.4s
+  so_or_3_r ... TSR=0.970  frames=122  t=2.8s
+  so_or_4_r ... TSR=0.946  frames=84  t=1.6s
+  so_or_5_r ... TSR=0.953  frames=63  t=0.7s
+  so_fl_r ... TSR=0.990  frames=153  t=2.0s
+  so_ml_r ... TSR=0.996  frames=153  t=2.9s
+  so_fm_r ... TSR=0.991  frames=322  t=4.8s
+  → soda average TSR = 0.967
+
+============================================================
+Object: chest
+  ch_tr_1_b ... TSR=0.992  frames=173  t=3.6s
+  ch_tr_2_b ... TSR=0.990  frames=60  t=1.0s
+  ch_tr_3_b ... TSR=0.988  frames=37  t=0.8s
+  ch_tr_4_b ... TSR=0.989  frames=26  t=0.5s
+  ch_tr_5_b ... TSR=0.981  frames=22  t=0.3s
+  ch_zo_1_b ... TSR=0.985  frames=340  t=6.3s
+  ch_zo_2_b ... TSR=0.989  frames=118  t=1.9s
+  ch_zo_3_b ... TSR=0.984  frames=75  t=1.4s
+  ch_zo_4_b ... TSR=0.985  frames=54  t=1.1s
+  ch_zo_5_b ... TSR=0.988  frames=43  t=0.8s
+  ch_ir_1_b ... TSR=0.968  frames=369  t=5.0s
+  ch_ir_2_b ... TSR=0.975  frames=126  t=1.5s
+  ch_ir_3_b ... TSR=0.985  frames=77  t=1.0s
+  ch_ir_4_b ... TSR=0.968  frames=52  t=1.0s
+  ch_ir_5_b ... TSR=0.969  frames=40  t=0.6s
+  ch_or_1_b ... TSR=0.964  frames=599  t=9.1s
+  ch_or_2_b ... TSR=0.963  frames=201  t=3.1s
+  ch_or_3_b ... TSR=0.960  frames=122  t=2.3s
+  ch_or_4_b ... TSR=0.946  frames=84  t=1.0s
+  ch_or_5_b ... TSR=0.925  frames=63  t=1.0s
+  ch_fl_b ... TSR=0.989  frames=153  t=3.0s
+  ch_ml_b ... TSR=0.993  frames=153  t=2.6s
+  ch_fm_b ... TSR=0.995  frames=322  t=5.9s
+  ch_tr_1_f ... TSR=0.988  frames=173  t=2.4s
+  ch_tr_2_f ... TSR=0.987  frames=60  t=1.0s
+  ch_tr_3_f ... TSR=0.992  frames=37  t=0.8s
+  ch_tr_4_f ... TSR=0.981  frames=26  t=0.6s
+  ch_tr_5_f ... TSR=0.974  frames=22  t=0.4s
+  ch_zo_1_f ... TSR=0.990  frames=340  t=5.2s
+  ch_zo_2_f ... TSR=0.998  frames=118  t=2.4s
+  ch_zo_3_f ... TSR=0.990  frames=75  t=1.2s
+  ch_zo_4_f ... TSR=0.990  frames=54  t=0.9s
+  ch_zo_5_f ... TSR=0.990  frames=43  t=0.9s
+  ch_ir_1_f ... TSR=0.990  frames=369  t=5.7s
+  ch_ir_2_f ... TSR=0.980  frames=126  t=2.0s
+  ch_ir_3_f ... TSR=0.985  frames=77  t=0.8s
+  ch_ir_4_f ... TSR=0.986  frames=52  t=1.0s
+  ch_ir_5_f ... TSR=0.986  frames=40  t=0.8s
+  ch_or_1_f ... TSR=0.905  frames=599  t=9.2s
+  ch_or_2_f ... TSR=0.885  frames=201  t=3.1s
+  ch_or_3_f ... TSR=0.910  frames=122  t=1.6s
+  ch_or_4_f ... TSR=0.898  frames=84  t=1.5s
+  ch_or_5_f ... TSR=0.880  frames=63  t=1.2s
+  ch_fl_f ... TSR=0.998  frames=153  t=2.3s
+  ch_ml_f ... TSR=0.997  frames=153  t=2.4s
+  ch_fm_f ... TSR=0.959  frames=322  t=5.1s
+  ch_tr_1_l ... TSR=0.979  frames=173  t=2.6s
+  ch_tr_2_l ... TSR=0.984  frames=60  t=0.9s
+  ch_tr_3_l ... TSR=0.976  frames=37  t=0.6s
+  ch_tr_4_l ... TSR=0.981  frames=26  t=0.4s
+  ch_tr_5_l ... TSR=0.967  frames=22  t=0.5s
+  ch_zo_1_l ... TSR=0.991  frames=340  t=5.1s
+  ch_zo_2_l ... TSR=0.991  frames=118  t=2.1s
+  ch_zo_3_l ... TSR=0.994  frames=75  t=1.4s
+  ch_zo_4_l ... TSR=0.988  frames=54  t=0.6s
+  ch_zo_5_l ... TSR=0.995  frames=43  t=0.6s
+  ch_ir_1_l ... TSR=0.983  frames=369  t=4.9s
+  ch_ir_2_l ... TSR=0.970  frames=126  t=1.5s
+  ch_ir_3_l ... TSR=0.971  frames=77  t=0.9s
+  ch_ir_4_l ... TSR=0.964  frames=52  t=0.8s
+  ch_ir_5_l ... TSR=0.970  frames=40  t=0.9s
+  ch_or_1_l ... TSR=0.879  frames=599  t=6.9s
+  ch_or_2_l ... TSR=0.892  frames=201  t=2.5s
+  ch_or_3_l ... TSR=0.898  frames=122  t=1.2s
+  ch_or_4_l ... TSR=0.864  frames=84  t=1.3s
+  ch_or_5_l ... TSR=0.892  frames=63  t=0.7s
+  ch_fl_l ... TSR=0.989  frames=153  t=2.5s
+  ch_ml_l ... TSR=0.984  frames=153  t=2.6s
+  ch_fm_l ... TSR=0.968  frames=322  t=4.8s
+  ch_tr_1_r ... TSR=0.982  frames=173  t=2.9s
+  ch_tr_2_r ... TSR=0.972  frames=60  t=1.0s
+  ch_tr_3_r ... TSR=0.977  frames=37  t=0.5s
+  ch_tr_4_r ... TSR=0.972  frames=26  t=0.5s
+  ch_tr_5_r ... TSR=0.965  frames=22  t=0.3s
+  ch_zo_1_r ... TSR=0.984  frames=340  t=4.7s
+  ch_zo_2_r ... TSR=0.992  frames=118  t=1.9s
+  ch_zo_3_r ... TSR=0.984  frames=75  t=1.3s
+  ch_zo_4_r ... TSR=0.985  frames=54  t=0.9s
+  ch_zo_5_r ... TSR=0.985  frames=43  t=0.7s
+  ch_ir_1_r ... TSR=0.974  frames=369  t=4.1s
+  ch_ir_2_r ... TSR=0.973  frames=126  t=1.7s
+  ch_ir_3_r ... TSR=0.978  frames=77  t=1.1s
+  ch_ir_4_r ... TSR=0.969  frames=52  t=0.8s
+  ch_ir_5_r ... TSR=0.969  frames=40  t=0.6s
+  ch_or_1_r ... TSR=0.912  frames=599  t=6.8s
+  ch_or_2_r ... TSR=0.873  frames=201  t=2.8s
+  ch_or_3_r ... TSR=0.885  frames=122  t=1.7s
+  ch_or_4_r ... TSR=0.876  frames=84  t=0.8s
+  ch_or_5_r ... TSR=0.881  frames=63  t=0.7s
+  ch_fl_r ... TSR=0.986  frames=153  t=2.3s
+  ch_ml_r ... TSR=0.995  frames=153  t=2.0s
+  ch_fm_r ... TSR=0.988  frames=322  t=5.4s
+  → chest average TSR = 0.960
+
+============================================================
+Final Track Success Rate (fraction of tracks on-object):
+  soda        : 0.967
+  chest       : 0.960
+  average     : 0.963
+
+Results saved to /mnt/data/mritunjoyh/3DObjectTracking/co-tracker/ct3_gpu1.json
