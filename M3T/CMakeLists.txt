@@ -33,7 +33,7 @@ if (UNIX)
 endif ()
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.1.2 REQUIRED)
-find_package(OpenCV 4.3.0 REQUIRED COMPONENTS core imgproc highgui imgcodecs calib3d features2d xfeatures2d OPTIONAL_COMPONENTS cudafeatures2d)
+find_package(OpenCV 4.2.0 REQUIRED COMPONENTS core imgproc highgui imgcodecs calib3d features2d xfeatures2d OPTIONAL_COMPONENTS cudafeatures2d)
 
 if (USE_AZURE_KINECT)
     find_package(k4a 1.3.0 REQUIRED)

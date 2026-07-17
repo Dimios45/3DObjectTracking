@@ -1,0 +1,13 @@
+/*
+/*/
+*.asv
+doc/html
+!/include/
+!/src/
+!/third_party/
+!/examples/
+!/doc/
+!.gitignore
+!CMakeLists.txt
+!readme.md
+!*.png

@@ -115,6 +115,7 @@ class Tracker {
   void set_cycle_duration(const std::chrono::milliseconds &cycle_duration);
   void set_visualization_time(int visualization_time);
   void set_viewer_time(int viewer_time);
+  void set_recording_directory(const std::filesystem::path &recording_directory);
 
   // Main method
   bool RunTrackerProcess(bool execute_detection = false,
@@ -235,6 +236,7 @@ class Tracker {
   std::chrono::milliseconds cycle_duration_{33};
   int visualization_time_ = 0;
   int viewer_time_ = 1;
+  std::filesystem::path recording_directory_{};
 
   // Internally used objects
   std::vector<std::shared_ptr<Detector>> detecting_detector_ptrs_{};

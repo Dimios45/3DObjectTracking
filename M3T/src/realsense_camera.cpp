@@ -2,6 +2,8 @@
 // Copyright (c) 2023 Manuel Stoiber, German Aerospace Center (DLR)
 
 #include <m3t/realsense_camera.h>
+#include <thread>
+#include <chrono>
 
 namespace m3t {
 
@@ -34,18 +36,42 @@ bool RealSense::UnregisterID(int id) {
 bool RealSense::SetUp() {
   const std::lock_guard<std::mutex> lock{mutex_};
   if (!initial_set_up_) {
+    // Reset device to recover from any leftover state after a previous crash
+    try {
+      rs2::context ctx;
+      auto devices = ctx.query_devices();
+      if (devices.size() == 0) {
+        std::cerr << "No device connected" << std::endl;
+        return false;
+      }
+      devices[0].hardware_reset();
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+    } catch (const std::exception &e) {
+      std::cerr << "Warning: device reset failed: " << e.what() << std::endl;
+    }
+
     // Configure camera
     if (use_color_camera_)
-      config_.enable_stream(RS2_STREAM_COLOR, 960, 540, RS2_FORMAT_BGR8, 60);
+      config_.enable_stream(RS2_STREAM_COLOR, 960, 540, RS2_FORMAT_BGR8, 30);
     if (use_depth_camera_)
-      config_.enable_stream(RS2_STREAM_DEPTH, 848, 480, RS2_FORMAT_Z16, 60);
+      config_.enable_stream(RS2_STREAM_DEPTH, 848, 480, RS2_FORMAT_Z16, 30);
 
-    // Start camera
-    try {
-      profile_ = pipe_.start(config_);
-    } catch (std::exception &e) {
-      std::cerr << e.what() << std::endl;
-      return false;
+    // Start camera with retries to handle transient USB timeouts
+    constexpr int kMaxRetries = 3;
+    bool started = false;
+    for (int attempt = 0; attempt < kMaxRetries && !started; ++attempt) {
+      try {
+        if (attempt > 0) {
+          std::cerr << "Retrying camera start (attempt " << attempt + 1 << "/"
+                    << kMaxRetries << ")..." << std::endl;
+          std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+        profile_ = pipe_.start(config_);
+        started = true;
+      } catch (const std::exception &e) {
+        std::cerr << "Camera start failed: " << e.what() << std::endl;
+        if (attempt == kMaxRetries - 1) return false;
+      }
     }
 
     // Get extrinsics and calculate pose
@@ -61,10 +87,18 @@ bool RealSense::SetUp() {
       depth2color_pose_ = color2depth_pose_.inverse();
     }
 
+    // Wait for camera hardware to become ready after start()
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     // Load multiple images to adjust to white balance
     constexpr int kNumberImagesDropped = 10;
     for (int i = 0; i < kNumberImagesDropped; ++i) {
-      pipe_.try_wait_for_frames(&frameset_);
+      try {
+        pipe_.try_wait_for_frames(&frameset_);
+      } catch (const std::exception &e) {
+        std::cerr << "Warning: dropped frame during warm-up: " << e.what()
+                  << std::endl;
+      }
     }
     initial_set_up_ = true;
   }
@@ -76,10 +110,20 @@ bool RealSense::UpdateCapture(int id, bool synchronized) {
   if (!initial_set_up_) return false;
 
   if (update_capture_ids_.at(id)) {
-    if (synchronized)
-      pipe_.try_wait_for_frames(&frameset_);
-    else
-      pipe_.poll_for_frames(&frameset_);
+    try {
+      if (synchronized) {
+        if (!pipe_.try_wait_for_frames(&frameset_)) {
+          std::cerr << "Warning: try_wait_for_frames timed out" << std::endl;
+          return false;
+        }
+      } else {
+        pipe_.poll_for_frames(&frameset_);
+      }
+    } catch (const std::exception &e) {
+      std::cerr << "Warning: failed to capture frame: " << e.what()
+                << std::endl;
+      return false;
+    }
     for (auto &[_, v] : update_capture_ids_) v = false;
   }
   update_capture_ids_.at(id) = true;
@@ -156,7 +200,7 @@ bool RealSenseColorCamera::UpdateImage(bool synchronized) {
   }
 
   // Get frameset and copy data to image
-  realsense_.UpdateCapture(realsense_id_, synchronized);
+  if (!realsense_.UpdateCapture(realsense_id_, synchronized)) return false;
   cv::Mat{cv::Size{intrinsics_.width, intrinsics_.height}, CV_8UC3,
           (void *)realsense_.frameset().get_color_frame().get_data(),
           cv::Mat::AUTO_STEP}
@@ -261,7 +305,7 @@ bool RealSenseDepthCamera::UpdateImage(bool synchronized) {
   }
 
   // Get frameset and copy data to image
-  realsense_.UpdateCapture(realsense_id_, synchronized);
+  if (!realsense_.UpdateCapture(realsense_id_, synchronized)) return false;
   cv::Mat{cv::Size{intrinsics_.width, intrinsics_.height}, CV_16UC1,
           (void *)realsense_.frameset().get_depth_frame().get_data(),
           cv::Mat::AUTO_STEP}

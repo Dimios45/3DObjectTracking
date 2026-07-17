@@ -218,6 +218,11 @@ void Tracker::set_visualization_time(int visualization_time) {
 
 void Tracker::set_viewer_time(int viewer_time) { viewer_time_ = viewer_time; }
 
+void Tracker::set_recording_directory(
+    const std::filesystem::path &recording_directory) {
+  recording_directory_ = recording_directory;
+}
+
 bool Tracker::RunTrackerProcess(bool execute_detection, bool start_tracking,
                                 const std::set<std::string> *names_detecting,
                                 const std::set<std::string> *names_starting) {
@@ -382,9 +387,19 @@ bool Tracker::UpdateViewers(int iteration) {
       ExecuteDetection(true);
     } else if (key == 't') {
       StartTracking();
+      if (!recording_directory_.empty()) {
+        std::filesystem::create_directories(recording_directory_);
+        for (auto &viewer_ptr : viewer_ptrs_)
+          viewer_ptr->StartSavingImages(recording_directory_, "png");
+        std::cout << "Recording -> " << recording_directory_ << std::endl;
+      }
     } else if (key == 's') {
       StopTracking();
+      for (auto &viewer_ptr : viewer_ptrs_)
+        viewer_ptr->StopSavingImages();
     } else if (key == 'q') {
+      for (auto &viewer_ptr : viewer_ptrs_)
+        viewer_ptr->StopSavingImages();
       quit_tracker_process_ = true;
     }
   }

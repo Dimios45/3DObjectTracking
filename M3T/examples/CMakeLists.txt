@@ -36,6 +36,12 @@ target_link_libraries(run_on_recorded_sequence PUBLIC m3t)
 add_executable(run_generated_tracker run_generated_tracker.cpp)
 target_link_libraries(run_generated_tracker PUBLIC m3t)
 
+add_executable(run_sequence_tracker run_sequence_tracker.cpp)
+target_link_libraries(run_sequence_tracker PUBLIC m3t)
+
+add_executable(run_live_tracker run_live_tracker.cpp)
+target_link_libraries(run_live_tracker PUBLIC m3t)
+
 add_executable(run_pen_paper_demo run_pen_paper_demo.cpp)
 target_link_libraries(run_pen_paper_demo PUBLIC m3t)
 
